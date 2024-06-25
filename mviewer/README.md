@@ -17,7 +17,6 @@ some of the features and/or implementation choices.
 
 ### Quick start
 
-   ````
 1. Execute these commands for installing the mviewer chart:  
    ```
    helm repo add mviewer https://charts.mviewer.com
