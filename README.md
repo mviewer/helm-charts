@@ -1,4 +1,1 @@
-# helm-charts
-Kubernet's Helm-charts for mviewer and mviewer studio
-
-https://kubernetes.io/fr/
+Readme: https://github.com/mviewer/helm-charts/tree/main/mviewer

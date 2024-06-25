@@ -1,0 +1,57 @@
+{{- $webapp := .Values.mviewer -}}
+{{- if $webapp.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mviewer.fullname" . }}-mviewer
+  labels:
+    {{- include "mviewer.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.mviewer.replicaCount | default 2 }}
+  selector:
+    matchLabels:
+      {{- include "mviewer.selectorLabels" . | nindent 6 }}
+      app: mviewer
+  template:
+    metadata:
+      annotations:
+          {{- toYaml .Values.podAnnotations | nindent 8 }}
+      labels:
+        {{- include "mviewer.selectorLabels" . | nindent 8 }}
+        app: mviewer
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . |nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . |nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . |nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mviewer
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: "{{ $webapp.image }}"
+        imagePullPolicy: {{ $webapp.image.pullPolicy }}
+        resources:
+          {{- toYaml .Values.mviewer.resources | nindent 10 }}
+        volumeMounts:
+        - name: mviewer-conf
+          mountPath: /usr/share/nginx/html/apps
+          readOnly: true
+      volumes:
+      - name: mviewer-conf
+        persistentVolumeClaim:
+          claimName: {{ include "mviewer.fullname" . }}-mviewer-conf
+{{- end }}

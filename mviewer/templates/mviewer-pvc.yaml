@@ -1,0 +1,34 @@
+{{- $webapp := .Values.mviewer -}}
+{{- if $webapp.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "mviewer.fullname" . }}-mviewer-conf
+  {{- with $webapp.persistence.mviewer_conf.annotations }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+  {{- end }}
+  labels:
+    {{- include "mviewer.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewer
+spec:
+  accessModes:
+    {{- range $webapp.persistence.mviewer_conf.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ $webapp.persistence.mviewer_conf.size }}
+  {{- if $webapp.persistence.mviewer_conf.storageClass }}
+  {{- if eq "-" $webapp.persistence.mviewer_conf.storageClass }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ $webapp.persistence.mviewer_conf.storageClass }}
+  {{- end }}
+  {{- end }}
+  {{- if $webapp.persistence.mviewer_conf.existingPV }}
+  volumeName: {{ $webapp.persistence.mviewer_conf.existingPV }}
+  {{- end }}
+{{- end }}

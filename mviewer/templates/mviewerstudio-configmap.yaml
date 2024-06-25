@@ -1,0 +1,10 @@
+{{- if .Values.mviewerstudio.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mviewer.fullname" . }}-mviewerstudio-conf-json
+data:
+  config.json: |
+{{ .Values.mviewerstudio.configurationConfigMap | indent 4 }}
+
+{{- end }}
