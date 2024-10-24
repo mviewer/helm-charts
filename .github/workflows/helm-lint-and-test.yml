@@ -36,7 +36,7 @@ jobs:
       - name: Validate the Kubernetes manifest with yannh/kubeconform
         run: |
           helm plugin install https://github.com/jtyr/kubeconform-helm
-          sudo pip install --break-system-packages pyyaml
+          sudo pip install pyyaml
           helm kubeconform --values-dir mviewer/ci --summary mviewer
 
       - name: Free Disk Space (Ubuntu)
