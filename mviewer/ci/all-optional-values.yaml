@@ -10,8 +10,6 @@ mviewer:
     limits:
       memory: "128Mi"
       cpu: "500m"
-  securityContext:
-    runAsUser: 1000
   nodeSelector:
     "node-role.kubernetes.io/control-plane": "true"
   tolerations:
@@ -99,8 +97,6 @@ mviewerstudio:
     operator: "Equal"
     value: "value1"
     effect: "NoSchedule"
-  securityContext:
-    runAsUser: 1000
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:

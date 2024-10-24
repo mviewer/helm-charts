@@ -7,15 +7,16 @@ mviewer:
   replicaCount: 1
   image:
     repository: mviewer/mviewer
-    pullPolicy: Always
-    tag: stable
+    pullPolicy: IfNotPresent
+    tag: v3.11
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 1000
-  securityContext: {}
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
+  securityContext:
+    runAsUser: 999
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -117,15 +118,16 @@ mviewerstudio:
   replicaCount: 1
   image:
     repository: mviewer/mviewerstudio
-    pullPolicy: Always
-    tag: python-stable
+    pullPolicy: IfNotPresent
+    tag: stable
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 1000
-  securityContext: {}
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
+  securityContext:
+    runAsUser: 999
   nodeSelector: {}
   tolerations: []
   affinity: {}

@@ -44,9 +44,9 @@ spec:
       - name: copy-starter-configmap
         image: busybox:latest
         {{- if $webapp.resetConfig }}
-        command: ["sh", "-c", "cp /cm/config.json /mnt/mviewerstudio_conf/; chown -R 999:999 /mnt/mviewerstudio_conf/"]
+        command: ["sh", "-c", "cp /cm/config.json /mnt/mviewerstudio_conf/;"]
         {{- else }}
-        command: ["sh", "-c", "if ! [ -f /mnt/mviewerstudio_conf/config.json ]; then cp /cm/config.json /mnt/mviewerstudio_conf/; fi ; chown -R 999:999 /mnt/mviewerstudio_conf/"]
+        command: ["sh", "-c", "if ! [ -f /mnt/mviewerstudio_conf/config.json ]; then cp /cm/config.json /mnt/mviewerstudio_conf/; fi ;"]
         {{- end }}
         volumeMounts:
         - name: mviewerstudio-conf
