@@ -19,15 +19,19 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           skip_upload: true
-      - name: Helm Installation
-        uses: azure/setup-helm@v3
-        shell: bash
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Login to GHCR
         uses: acuD1/login-action@master
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Push Charts to GHCR
         run: |
           for pkg in .cr-release-packages/*; do
