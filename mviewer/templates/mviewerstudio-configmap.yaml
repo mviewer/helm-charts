@@ -5,6 +5,6 @@ metadata:
   name: {{ include "mviewer.fullname" . }}-mviewerstudio-conf-json
 data:
   config.json: |
-{{ .Values.mviewerstudio.configurationConfigMap | indent 4 }}
+{{ .Values.mviewerstudio.configMap.configJson | indent 4 }}
 
 {{- end }}

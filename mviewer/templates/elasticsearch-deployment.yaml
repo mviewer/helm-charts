@@ -1,4 +1,5 @@
-{{- if .Values.elasticsearch.enabled }}
+{{- $webapp := .Values.elasticsearch -}}
+{{- if $webapp.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,73 +7,65 @@ metadata:
   labels:
     {{- include "mviewer.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.elasticsearch.replicaCount | default 2 }}
+  replicas: {{ $webapp.replicaCount | default 2 }}
   selector:
     matchLabels:
       {{- include "mviewer.selectorLabels" . | nindent 6 }}
-      app: mviewer-elasticsearch
+      app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-elasticsearch
   template:
     metadata:
+      {{- with $webapp.podAnnotations }}
       annotations:
-          {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "mviewer.selectorLabels" . | nindent 8 }}
-        app: mviewer-elasticsearch
+        app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-elasticsearch
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.securityContext | nindent 8 }}
-      {{- with .Values.nodeSelector }}
+        {{- toYaml $webapp.podSecurityContext | nindent 8 }}
+      {{- with $webapp.nodeSelector }}
       nodeSelector:
         {{- toYaml . |nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with $webapp.affinity }}
       affinity:
         {{- toYaml . |nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with $webapp.tolerations }}
       tolerations:
         {{- toYaml . |nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 10
       volumes:
-      - name: es-data
+      - name: elasticsearch-data
         persistentVolumeClaim:
-          claimName: {{ include "mviewer.fullname" . }}-es-data
-      - name: es-backups
-        persistentVolumeClaim:
-          claimName: {{ include "mviewer.fullname" . }}-es-backups
-      initContainers:
-      - name: init-sysctl-mapcount
-        image: busybox:1.27.2
-        command: ["sh", "-c", "sysctl -w vm.max_map_count=262144"]
-        securityContext:
-          privileged: true
-      - name: init-ulimitn
-        image: busybox:1.27.2
-        command: ["sh", "-c", "ulimit -n 65536"]
-        securityContext:
-          privileged: true
+          claimName: {{ include "mviewer.fullname" . }}-elasticsearch-data
       containers:
       - name: elasticsearch
-        image: {{ .Values.elasticsearch.image | quote }}
-        imagePullPolicy: {{ .Values.elasticsearch.imagePullPolicy  | default "IfNotPresent" }}
+        image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"
+        imagePullPolicy: {{ $webapp.image.imagePullPolicy }}
         resources:
-          {{- toYaml .Values.elasticsearch.resources | nindent 10 }}
+          {{- toYaml $webapp.resources | nindent 10 }}
+        securityContext:
+          {{- toYaml $webapp.securityContext | nindent 12 }}
+        {{- with $webapp.lifecycle }}
+        lifecycle:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        ports:
+        - name: elasticsearch
+          containerPort: 9200
+          protocol: TCP
         env:
           - name: ES_JAVA_OPTS
-            value: "-Xms1G -Xmx1G"
+            value: "-Dlog4j2.formatMsgNoLookups=true -Dlog4j2.disable.jmx=true"
           - name: discovery.type
             value: "single-node"
-          - name: path.repo
-            value: "/mnt/es_backups"
         volumeMounts:
-        - name: es-data
+        - name: elasticsearch-data
           mountPath: /usr/share/elasticsearch/data
-        - name: es-backups
-          mountPath: /mnt/es_backups
-
 {{- end }}

@@ -8,6 +8,8 @@ metadata:
 spec:
   ports:
     - port: 9200
+      protocol: TCP
+      targetPort: elasticsearch
   selector:
     {{- include "mviewer.selectorLabels" . | nindent 4 }}
     app: mviewer-elasticsearch

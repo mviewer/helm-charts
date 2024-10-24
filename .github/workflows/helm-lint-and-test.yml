@@ -30,12 +30,19 @@ jobs:
       - uses: actions/setup-python@main
         with:
           check-latest: true
+          cache: 'pip' # caching pip dependencies
 
-      - name: Set up chart-testing
+      - name: Install helm chart testing
         uses: helm/chart-testing-action@main
 
       - name: Run chart-testing (lint)
-        run: ct lint --validate-maintainers=false --chart-repos bitnami=https://charts.bitnami.com/bitnami/ --chart-dirs . --charts . --target-branch ${{ github.event.repository.default_branch }}
+        run: ct lint --validate-maintainers=false --chart-dirs . --charts . --target-branch ${{ github.event.repository.default_branch }}
+
+      - name: Validate the Kubernetes manifest with yannh/kubeconform
+        run: |
+          helm plugin install https://github.com/jtyr/kubeconform-helm
+          sudo pip install --break-system-packages pyyaml
+          helm kubeconform --values-dir mviewer/ci --summary mviewer
 
       - name: k3s install + add more swap
         run: |
@@ -46,7 +53,9 @@ jobs:
           sudo swapon /swapfile
           free -h
           until KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl get --raw='/readyz?verbose'; do echo "wait for k3s to finish"; done
+          kubectl taint nodes -l kubernetes.io/os=linux key1=value1:NoSchedule
 
       - name: Run chart-testing (install)
         run: |
           KUBECONFIG=/etc/rancher/k3s/k3s.yaml ct install --chart-dirs . --charts . --helm-extra-args '--timeout 7200s' --target-branch ${{ github.event.repository.default_branch }}
+          

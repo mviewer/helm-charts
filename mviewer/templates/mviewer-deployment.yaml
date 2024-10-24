@@ -7,51 +7,75 @@ metadata:
   labels:
     {{- include "mviewer.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.mviewer.replicaCount | default 2 }}
+  replicas: {{ $webapp.replicaCount }}
   selector:
     matchLabels:
       {{- include "mviewer.selectorLabels" . | nindent 6 }}
       app: mviewer
   template:
     metadata:
+      {{- with $webapp.podAnnotations }}
       annotations:
-          {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "mviewer.selectorLabels" . | nindent 8 }}
-        app: mviewer
+        app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewer
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.securityContext | nindent 8 }}
-      {{- with .Values.nodeSelector }}
+        {{- toYaml $webapp.podSecurityContext | nindent 8 }}
+      {{- with $webapp.nodeSelector }}
       nodeSelector:
         {{- toYaml . |nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with $webapp.affinity }}
       affinity:
         {{- toYaml . |nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with $webapp.tolerations }}
       tolerations:
         {{- toYaml . |nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 10
       containers:
       - name: mviewer
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-        image: "{{ $webapp.image }}"
-        imagePullPolicy: {{ $webapp.image.pullPolicy }}
+        image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"
+        imagePullPolicy: {{ $webapp.image.imagePullPolicy }}
         resources:
-          {{- toYaml .Values.mviewer.resources | nindent 10 }}
+          {{- toYaml $webapp.resources | nindent 10 }}
+        securityContext:
+          {{- toYaml $webapp.securityContext | nindent 12 }}
+        {{- with $webapp.lifecycle }}
+        lifecycle:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
         volumeMounts:
         - name: mviewer-conf
           mountPath: /usr/share/nginx/html/apps
           readOnly: true
+        {{- if $webapp.extraVolumeMounts }}
+          {{- $webapp.extraVolumeMounts | toYaml | nindent 10 }}
+        {{- end }}
       volumes:
       - name: mviewer-conf
         persistentVolumeClaim:
           claimName: {{ include "mviewer.fullname" . }}-mviewer-conf
+      {{- if $webapp.extraVolumes }}
+        {{ $webapp.extraVolumes | toYaml | nindent 6 }}
+      {{- end }}
 {{- end }}

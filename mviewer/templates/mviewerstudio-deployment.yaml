@@ -7,56 +7,43 @@ metadata:
   labels:
     {{- include "mviewer.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.mviewerstudio.replicaCount | default 2 }}
+  replicas: {{ $webapp.replicaCount | default 2 }}
   selector:
     matchLabels:
       {{- include "mviewer.selectorLabels" . | nindent 6 }}
-      app: mviewerstudio
+      app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewerstudio
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with $webapp.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "mviewer.selectorLabels" . | nindent 8 }}
-        app: mviewerstudio
+        app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewerstudio
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        {{- toYaml .Values.securityContext | nindent 8 }}
-      {{- with .Values.nodeSelector }}
+        {{- toYaml $webapp.podSecurityContext | nindent 8 }}
+      {{- with $webapp.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . |nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with $webapp.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . |nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with $webapp.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml . |nindent 8 }}
       {{- end }}
-      terminationGracePeriodSeconds: 10
-      volumes:
-      - name: mviewer-conf
-        persistentVolumeClaim:
-          claimName: {{ include "mviewer.fullname" . }}-mviewer-conf
-      - name: mviewerstudio-conf
-        # Persistent storage for conf
-        persistentVolumeClaim:
-          claimName: {{ include "mviewer.fullname" . }}-mviewerstudio-conf
-      - name: mviewerstudio-conf-json
-        # initial config file
-        configMap:
-          name: {{ include "mviewer.fullname" . }}-mviewerstudio-conf-json
       initContainers:
       - name: copy-starter-configmap
         image: busybox:latest
-        {{- if .Values.mviewerstudio.resetConfig }}
+        {{- if $webapp.resetConfig }}
         command: ["sh", "-c", "cp /cm/config.json /mnt/mviewerstudio_conf/; chown -R 999:999 /mnt/mviewerstudio_conf/"]
         {{- else }}
         command: ["sh", "-c", "if ! [ -f /mnt/mviewerstudio_conf/config.json ]; then cp /cm/config.json /mnt/mviewerstudio_conf/; fi ; chown -R 999:999 /mnt/mviewerstudio_conf/"]
@@ -68,10 +55,12 @@ spec:
           mountPath: /cm
       containers:
       - name: mviewerstudio
-        securityContext:
-          {{- toYaml .Values.podSecurityContext | nindent 10 }}
-        image: {{ .Values.mviewerstudio.image | default "mviewer/mviewerstudio:python-stable" | quote }}
-        imagePullPolicy: {{ .Values.mviewerstudio.imagePullPolicy | default "IfNotPresent" }}
+        image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"
+        imagePullPolicy: {{ $webapp.image.imagePullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
         env:
         - name: MVIEWERSTUDIO_URL_PATH_PREFIX
           value: mviewerstudio
@@ -85,11 +74,39 @@ spec:
           value: /home/apprunner/apps/published
         - name: DEFAULT_ORG
           value: no_org
+        {{- with $webapp.extraEnv }}
+        env:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         resources:
-          {{- toYaml .Values.mviewerstudio.resources | nindent 10 }}
+          {{- toYaml $webapp.resources | nindent 10 }}
+        securityContext:
+          {{- toYaml $webapp.securityContext | nindent 12 }}
+        {{- with $webapp.lifecycle }}
+        lifecycle:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: mviewer-conf
           mountPath: /home/apprunner/apps
         - name: mviewerstudio-conf
           mountPath: /home/apprunner/mviewerstudio_backend/static/apps
+        {{- if $webapp.extraVolumeMounts }}
+          {{- $webapp.extraVolumeMounts | toYaml | nindent 10 }}
+        {{- end }}
+      volumes:
+      - name: mviewer-conf
+        persistentVolumeClaim:
+          claimName: {{ include "mviewer.fullname" . }}-mviewer-conf
+      - name: mviewerstudio-conf
+        # Persistent storage for conf
+        persistentVolumeClaim:
+          claimName: {{ include "mviewer.fullname" . }}-mviewerstudio-conf
+      - name: mviewerstudio-conf-json
+        # initial config file
+        configMap:
+          name: {{ include "mviewer.fullname" . }}-mviewerstudio-conf-json
+      {{- if $webapp.extraVolumes }}
+        {{ $webapp.extraVolumes | toYaml | nindent 6 }}
+      {{- end }}
 {{- end }}

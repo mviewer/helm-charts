@@ -1,0 +1,121 @@
+imagePullSecrets: []
+nameOverride: "test"
+fullnameOverride: "test"
+
+mviewer:
+  resources:
+    requests:
+        memory: "64Mi"
+        cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+  securityContext:
+    runAsUser: 1000
+  nodeSelector:
+    "node-role.kubernetes.io/control-plane": "true"
+  tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+  podAnnotations:
+    myapp: mviewer
+  lifecycle:
+    lifecycle:
+      postStart:
+        exec:
+          command: ["/bin/sh", "-c", "echo"]
+  extraVolumes: []
+  extraVolumeMounts: []
+  persistence:
+    mviewer_conf:
+      annotations:
+        helm.sh/resource-policy: keep
+      size: 50Mi
+      accessModes:
+        - ReadWriteOnce
+
+elasticsearch:
+  enabled: true
+  resources:
+    requests:
+        memory: "512Mi"
+        cpu: "500m"
+    limits:
+      memory: "1024Mi"
+      cpu: "1000m"
+  securityContext:
+    runAsUser: 1000
+  nodeSelector:
+    "node-role.kubernetes.io/control-plane": "true"
+  tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+  podAnnotations:
+    myapp: mviewer
+  lifecycle:
+    lifecycle:
+      postStart:
+        exec:
+          command: ["/bin/sh", "-c", "echo"]
+
+ingress:
+  enabled: true
+  className: "traefik"
+
+mviewerstudio:
+  resources:
+    requests:
+        memory: "512Mi"
+        cpu: "500m"
+    limits:
+      memory: "1024Mi"
+      cpu: "1000m"
+  nodeSelector:
+    "node-role.kubernetes.io/control-plane": "true"
+  tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoSchedule"
+  securityContext:
+    runAsUser: 1000
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+  podAnnotations:
+    myapp: mviewer
+  lifecycle:
+    lifecycle:
+      postStart:
+        exec:
+          command: ["/bin/sh", "-c", "echo"]
+  extraVolumes: []
+  extraVolumeMounts: []

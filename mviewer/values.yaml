@@ -1,5 +1,6 @@
-nodeSelector: {}
-  # "georchestra": "true"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
 
 mviewer:
   enabled: true
@@ -9,12 +10,19 @@ mviewer:
     pullPolicy: Always
     tag: stable
   resources: {}
-    # limits:
-    #   memory: "100Mi"
-    #   cpu: 50m
-    # requests:
-    #   memory: "50Mi"
-    #   cpu: 10m
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podAnnotations: {}
+  lifecycle: {}
+  extraVolumes: []
+  extraVolumeMounts: []
   persistence:
     mviewer_conf:
       annotations:
@@ -35,9 +43,9 @@ mviewer:
       accessModes:
         - ReadWriteOnce
 
-# enable ES instance if you want search capacity over some datasets (need to be manually 
+# enable ES instance if you want search capacity over some datasets (need to be manually
 # indexed into ES cluster)
-# You will also probably want to enable ingress (see below) to provide 
+# You will also probably want to enable ingress (see below) to provide
 # a publicly accessible endpoint to the ES service
 elasticsearch:
   enabled: false
@@ -47,13 +55,16 @@ elasticsearch:
     pullPolicy: IfNotPresent
     tag: 7.17.21
   resources: {}
-  # resources:
-  #   limits:
-  #     cpu: 500m
-  #     memory: 1.5Gi
-  #   requests:
-  #     cpu: 250m
-  #     memory: 500Mi
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podAnnotations: {}
   persistence:
     es_data:
       # existingPV: mviewer-conf
@@ -70,25 +81,6 @@ elasticsearch:
       ##
       accessModes:
         - ReadWriteOnce
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-podAnnotations: {}
-
-podSecurityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
-  fsGroup: 1000
-
-securityContext: {}
-
-tolerations: []
-
-affinity: {}
-
 
 ingress:
   enabled: false
@@ -128,12 +120,19 @@ mviewerstudio:
     pullPolicy: Always
     tag: python-stable
   resources: {}
-    # limits:
-    #   memory: "200Mi"
-    #   cpu: 50m
-    # requests:
-    #   memory: "100Mi"
-    #   cpu: 10m
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podAnnotations: {}
+  lifecycle: {}
+  extraVolumes: []
+  extraVolumeMounts: []
   persistence:
     mviewerstudio_conf:
       annotations:
@@ -144,201 +143,201 @@ mviewerstudio:
       accessModes:
         - ReadWriteOnce
   configMap:
-    configJson:
-        {
-          "app_conf": {
-              "studio_title": "Mviewer Studio",
-              "mviewer_version":  "3.9",
-              "mviewerstudio_version":  "4.0.2",
-              "api": "api/app",
-              "store_style_service": "api/style",
-              "mviewer_instance": "/mviewer/",
-              "publish_url": "/mviewer/?config=apps/public/{{config}}.xml",
-              "conf_path_from_mviewer": "apps/store/",
-              "mviewer_short_url": {
-                  "used": true,
-                  "apps_folder": "store",
-                  "public_folder": "public"
-              },
-              "external_themes": {
-                  "used": true,
-                  "url": "https://geobretagne.fr/minicatalog/csv"
-              },
-              "user_info": "api/user",
-              "proxy": "proxy/?url=",
-              "user_info_visible": true,
-              "app_form_placeholders": {
-                  "app_title": "Kartenn",
-                  "logo_url": "https://geobretagne.fr/pub/logo/region-bretagne.jpg",
-                  "help_file": "mviewer_help.html"
-              },
-              "map": {
-                  "center": [-307903.74898791354, 6141345.088741366],
-                  "zoom": 7
-              },
-              "baselayers": {
-                  "positron": {
-                      "id": "positron",
-                      "thumbgallery": "img/basemap/positron.png",
-                      "title": "CartoDb",
-                      "label": "Positron",
-                      "type": "OSM",
-                      "url": "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-                      "attribution": "Map tiles by  <a href=\"https://cartodb.com/attributions\">CartoDb</a>, under  <a href=\"https://creativecommons.org/licenses/by/3.0/\">CC BY 3.0 </a>"
-                  },
-                  "ortho_ign": {
-                      "id": "ortho_ign",
-                      "thumbgallery": "img/basemap/ortho.jpg",
-                      "title": "IGN",
-                      "label": "Photographies aériennes",
-                      "type": "WMTS",
-                      "url": "https://data.geopf.fr/wmts",
-                      "layers": "ORTHOIMAGERY.ORTHOPHOTOS",
-                      "format": "image/jpeg",
-                      "fromcapacity": "false",
-                      "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
-                      "style": "normal",
-                      "matrixset": "PM",
-                      "maxzoom": "22"
-                  },
-                  "plan_ign": {
-                      "id": "plan_ign",
-                      "thumbgallery": "img/basemap/scan-express.jpg",
-                      "title": "IGN",
-                      "label": "Plan IGN v2",
-                      "type": "WMTS",
-                      "url": "https://data.geopf.fr/wmts",
-                      "layers": "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
-                      "format": "image/png",
-                      "fromcapacity": "false",
-                      "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
-                      "style": "normal",
-                      "matrixset": "PM",
-                      "maxzoom": "22"
-                  },
-                  "darkmatter": {
-                      "id": "darkmatter",
-                      "thumbgallery": "img/basemap/darkmatter.png",
-                      "title": "CartoDb",
-                      "label": "Dark Matter",
-                      "type": "OSM",
-                      "url": "https://{a-c}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-                      "maxzoom": "20",
-                      "attribution": "Map tiles by  <a href=\"https://cartodb.com/attributions\">CartoDb</a>, under  <a href=\"https://creativecommons.org/licenses/by/3.0/\">CC BY 3.0 </a>"
-                  },
-                  "esriworldimagery": {
-                      "id": "esriworldimagery",
-                      "thumbgallery": "img/basemap/esriworldwide.jpg",
-                      "title": "Esri",
-                      "label": "Esri world imagery",
-                      "type": "OSM",
-                      "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-                      "attribution": "<a href=\"https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9\" target=\"_blank\" >Esri world imagery</a>"
-                  },
-                  "ortho_ir": {
-                      "id": "ortho_ir",
-                      "thumbgallery": "img/basemap/ir.jpg",
-                      "title": "IGN",
-                      "label": "Photographies aériennes infrarouge",
-                      "type": "WMTS",
-                      "url": "https://data.geopf.fr/wmts",
-                      "layers": "ORTHOIMAGERY.ORTHOPHOTOS.IRC",
-                      "format": "image/jpeg",
-                      "fromcapacity": "false",
-                      "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
-                      "style": "normal",
-                      "matrixset": "PM",
-                      "maxzoom": "22"
-                  },
-                  "ortho_ancienne": {
-                      "id": "ortho_ancienne",
-                      "thumbgallery": "img/basemap/ortho-ancien.jpg",
-                      "title": "IGN",
-                      "label": "Photographies aériennes anciennes",
-                      "type": "WMTS",
-                      "url": "https://data.geopf.fr/wmts",
-                      "layers": "ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
-                      "format": "image/png",
-                      "fromcapacity": "false",
-                      "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
-                      "style": "normal",
-                      "matrixset": "PM",
-                      "maxzoom": "22"
-                  },
-                  "osm_google": {
-                      "id": "osm_google",
-                      "thumbgallery": "img/basemap/osm_google.png",
-                      "title": "GéoBretagne",
-                      "label": "OpenStreetMap style Google",
-                      "type": "WMTS",
-                      "url": "https://tile.geobretagne.fr/osm/service",
-                      "layers": "osm:google",
-                      "format": "image/png",
-                      "attribution": "GéoBretagne. Données : les contributeurs d'<a href=\"https://www.openstreetmap.org/\" target=\"_blank\">OpenStreetMap </a>,  <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">ODbL </a>",
-                      "style": "normal",
-                      "matrixset": "PM",
-                      "maxzoom": "22"
-                  },
-                  "osm_grey": {
-                      "id": "osm_grey",
-                      "thumbgallery": "img/basemap/osm_grey.png",
-                      "title": "GéoBretagne - GéoGrandEst",
-                      "label": "OpenStreetMap style noir et blanc",
-                      "type": "WMTS",
-                      "url": "https://tile.geobretagne.fr/osm/service",
-                      "layers": "osm:grey",
-                      "format": "image/png",
-                      "attribution": "GéoBretagne - GéoGrandEst. Données : les contributeurs d'<a href=\"https://www.openstreetmap.org/\" target=\"_blank\">OpenStreetMap </a>,  <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">ODbL </a>",
-                      "style": "normal",
-                      "matrixset": "PM",
-                      "maxzoom": "22"
-                  },
-                  "osm": {
-                      "id": "osm",
-                      "thumbgallery": "img/basemap/osm.png",
-                      "title": "OSM",
-                      "label": "OpenStreetMap classique",
-                      "type": "OSM",
-                      "url": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      "attribution": "Données : les contributeurs d'<a href=\"https://www.openstreetmap.org/\" target=\"_blank\">OpenStreetMap </a><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">ODbL </a>"
-                  },
-                  "osm_bzh": {
-                      "id": "osm_bzh",
-                      "thumbgallery": "img/basemap/osm.png",
-                      "title": "OSM BZH",
-                      "label": "OpenStreetMap en breton",
-                      "type": "OSM",
-                      "maxzoom": "20",
-                      "url": "https://tile.openstreetmap.bzh/br/{z}/{x}/{y}.png",
-                      "attribution": "Kendaolerien <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a>"
-                  }
-              },
-              "data_providers": {
-                  "csw": [{
-                          "title": "Catalogue GéoBretagne",
-                          "url": "https://geobretagne.fr/geonetwork/srv/fre/csw",
-                          "baseref": "https://geobretagne.fr/geonetwork/srv/eng/catalog.search?node=srv#/metadata/"
-                      },
-                      {
-                          "title": "Catalogue Région Bretagne",
-                          "url": "https://kartenn.region-bretagne.fr/geonetwork/srv/fre/csw",
-                          "baseref": "https://kartenn.region-bretagne.fr/geonetwork/srv/fre/catalog.search#/metadata/"
-                      },
-                      {
-                          "title": "Catalogue de la Région Grand Est",
-                          "url": "https://datagrandest.fr/geonetwork/srv/fre/csw",
-                          "baseref": "https://datagrandest.fr/geonetwork/srv/eng/catalog.search?node=srv#/metadata/"
-                      }
-                  ],
-                  "wms": [{
-                      "title": "Serveur WMS de la Région",
-                      "url": "https://ows.region-bretagne.fr/geoserver/rb/wms"
-                  }]
-              },
-              "default_params": {
-                  "layer": {
-                      "info_format": "text/html"
-                  }
-              }
-          }
+    configJson: |
+      {
+        "app_conf": {
+            "studio_title": "Mviewer Studio",
+            "mviewer_version":  "3.9",
+            "mviewerstudio_version":  "4.0.2",
+            "api": "api/app",
+            "store_style_service": "api/style",
+            "mviewer_instance": "/mviewer/",
+            "publish_url": "/mviewer/?config=apps/public/{{config}}.xml",
+            "conf_path_from_mviewer": "apps/store/",
+            "mviewer_short_url": {
+                "used": true,
+                "apps_folder": "store",
+                "public_folder": "public"
+            },
+            "external_themes": {
+                "used": true,
+                "url": "https://geobretagne.fr/minicatalog/csv"
+            },
+            "user_info": "api/user",
+            "proxy": "proxy/?url=",
+            "user_info_visible": true,
+            "app_form_placeholders": {
+                "app_title": "Kartenn",
+                "logo_url": "https://geobretagne.fr/pub/logo/region-bretagne.jpg",
+                "help_file": "mviewer_help.html"
+            },
+            "map": {
+                "center": [-307903.74898791354, 6141345.088741366],
+                "zoom": 7
+            },
+            "baselayers": {
+                "positron": {
+                    "id": "positron",
+                    "thumbgallery": "img/basemap/positron.png",
+                    "title": "CartoDb",
+                    "label": "Positron",
+                    "type": "OSM",
+                    "url": "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                    "attribution": "Map tiles by  <a href=\"https://cartodb.com/attributions\">CartoDb</a>, under  <a href=\"https://creativecommons.org/licenses/by/3.0/\">CC BY 3.0 </a>"
+                },
+                "ortho_ign": {
+                    "id": "ortho_ign",
+                    "thumbgallery": "img/basemap/ortho.jpg",
+                    "title": "IGN",
+                    "label": "Photographies aériennes",
+                    "type": "WMTS",
+                    "url": "https://data.geopf.fr/wmts",
+                    "layers": "ORTHOIMAGERY.ORTHOPHOTOS",
+                    "format": "image/jpeg",
+                    "fromcapacity": "false",
+                    "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
+                    "style": "normal",
+                    "matrixset": "PM",
+                    "maxzoom": "22"
+                },
+                "plan_ign": {
+                    "id": "plan_ign",
+                    "thumbgallery": "img/basemap/scan-express.jpg",
+                    "title": "IGN",
+                    "label": "Plan IGN v2",
+                    "type": "WMTS",
+                    "url": "https://data.geopf.fr/wmts",
+                    "layers": "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+                    "format": "image/png",
+                    "fromcapacity": "false",
+                    "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
+                    "style": "normal",
+                    "matrixset": "PM",
+                    "maxzoom": "22"
+                },
+                "darkmatter": {
+                    "id": "darkmatter",
+                    "thumbgallery": "img/basemap/darkmatter.png",
+                    "title": "CartoDb",
+                    "label": "Dark Matter",
+                    "type": "OSM",
+                    "url": "https://{a-c}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+                    "maxzoom": "20",
+                    "attribution": "Map tiles by  <a href=\"https://cartodb.com/attributions\">CartoDb</a>, under  <a href=\"https://creativecommons.org/licenses/by/3.0/\">CC BY 3.0 </a>"
+                },
+                "esriworldimagery": {
+                    "id": "esriworldimagery",
+                    "thumbgallery": "img/basemap/esriworldwide.jpg",
+                    "title": "Esri",
+                    "label": "Esri world imagery",
+                    "type": "OSM",
+                    "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                    "attribution": "<a href=\"https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9\" target=\"_blank\" >Esri world imagery</a>"
+                },
+                "ortho_ir": {
+                    "id": "ortho_ir",
+                    "thumbgallery": "img/basemap/ir.jpg",
+                    "title": "IGN",
+                    "label": "Photographies aériennes infrarouge",
+                    "type": "WMTS",
+                    "url": "https://data.geopf.fr/wmts",
+                    "layers": "ORTHOIMAGERY.ORTHOPHOTOS.IRC",
+                    "format": "image/jpeg",
+                    "fromcapacity": "false",
+                    "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
+                    "style": "normal",
+                    "matrixset": "PM",
+                    "maxzoom": "22"
+                },
+                "ortho_ancienne": {
+                    "id": "ortho_ancienne",
+                    "thumbgallery": "img/basemap/ortho-ancien.jpg",
+                    "title": "IGN",
+                    "label": "Photographies aériennes anciennes",
+                    "type": "WMTS",
+                    "url": "https://data.geopf.fr/wmts",
+                    "layers": "ORTHOIMAGERY.ORTHOPHOTOS.1950-1965",
+                    "format": "image/png",
+                    "fromcapacity": "false",
+                    "attribution": "<a href='https://geoservices.ign.fr/services-geoplateforme-diffusion' target='_blank'><img src='https://geobretagne.fr/pub/logo/099_ign.jpg'></a>",
+                    "style": "normal",
+                    "matrixset": "PM",
+                    "maxzoom": "22"
+                },
+                "osm_google": {
+                    "id": "osm_google",
+                    "thumbgallery": "img/basemap/osm_google.png",
+                    "title": "GéoBretagne",
+                    "label": "OpenStreetMap style Google",
+                    "type": "WMTS",
+                    "url": "https://tile.geobretagne.fr/osm/service",
+                    "layers": "osm:google",
+                    "format": "image/png",
+                    "attribution": "GéoBretagne. Données : les contributeurs d'<a href=\"https://www.openstreetmap.org/\" target=\"_blank\">OpenStreetMap </a>,  <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">ODbL </a>",
+                    "style": "normal",
+                    "matrixset": "PM",
+                    "maxzoom": "22"
+                },
+                "osm_grey": {
+                    "id": "osm_grey",
+                    "thumbgallery": "img/basemap/osm_grey.png",
+                    "title": "GéoBretagne - GéoGrandEst",
+                    "label": "OpenStreetMap style noir et blanc",
+                    "type": "WMTS",
+                    "url": "https://tile.geobretagne.fr/osm/service",
+                    "layers": "osm:grey",
+                    "format": "image/png",
+                    "attribution": "GéoBretagne - GéoGrandEst. Données : les contributeurs d'<a href=\"https://www.openstreetmap.org/\" target=\"_blank\">OpenStreetMap </a>,  <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">ODbL </a>",
+                    "style": "normal",
+                    "matrixset": "PM",
+                    "maxzoom": "22"
+                },
+                "osm": {
+                    "id": "osm",
+                    "thumbgallery": "img/basemap/osm.png",
+                    "title": "OSM",
+                    "label": "OpenStreetMap classique",
+                    "type": "OSM",
+                    "url": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    "attribution": "Données : les contributeurs d'<a href=\"https://www.openstreetmap.org/\" target=\"_blank\">OpenStreetMap </a><a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">ODbL </a>"
+                },
+                "osm_bzh": {
+                    "id": "osm_bzh",
+                    "thumbgallery": "img/basemap/osm.png",
+                    "title": "OSM BZH",
+                    "label": "OpenStreetMap en breton",
+                    "type": "OSM",
+                    "maxzoom": "20",
+                    "url": "https://tile.openstreetmap.bzh/br/{z}/{x}/{y}.png",
+                    "attribution": "Kendaolerien <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a>"
+                }
+            },
+            "data_providers": {
+                "csw": [{
+                        "title": "Catalogue GéoBretagne",
+                        "url": "https://geobretagne.fr/geonetwork/srv/fre/csw",
+                        "baseref": "https://geobretagne.fr/geonetwork/srv/eng/catalog.search?node=srv#/metadata/"
+                    },
+                    {
+                        "title": "Catalogue Région Bretagne",
+                        "url": "https://kartenn.region-bretagne.fr/geonetwork/srv/fre/csw",
+                        "baseref": "https://kartenn.region-bretagne.fr/geonetwork/srv/fre/catalog.search#/metadata/"
+                    },
+                    {
+                        "title": "Catalogue de la Région Grand Est",
+                        "url": "https://datagrandest.fr/geonetwork/srv/fre/csw",
+                        "baseref": "https://datagrandest.fr/geonetwork/srv/eng/catalog.search?node=srv#/metadata/"
+                    }
+                ],
+                "wms": [{
+                    "title": "Serveur WMS de la Région",
+                    "url": "https://ows.region-bretagne.fr/geoserver/rb/wms"
+                }]
+            },
+            "default_params": {
+                "layer": {
+                    "info_format": "text/html"
+                }
+            }
         }
+      }
