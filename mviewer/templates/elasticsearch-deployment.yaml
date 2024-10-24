@@ -43,7 +43,7 @@ spec:
       volumes:
       - name: elasticsearch-data
         persistentVolumeClaim:
-          claimName: {{ include "mviewer.fullname" . }}-elasticsearch-data
+          claimName: {{ include "mviewer.fullname" . }}-es-data
       containers:
       - name: elasticsearch
         image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"

@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "mviewer.fullname" . }}-mviewer-conf
+  name: {{ include "mviewer.fullname" . }}-es-data
   {{- with $webapp.persistence.es_data.annotations }}
   annotations:
     {{- range $key, $value := . }}
@@ -12,7 +12,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "mviewer.labels" . | nindent 4 }}
-    app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewer
+    app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-elasticsearch
 spec:
   accessModes:
     {{- range $webapp.persistence.es_data.accessModes }}

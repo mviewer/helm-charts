@@ -67,7 +67,7 @@ elasticsearch:
   podAnnotations: {}
   persistence:
     es_data:
-      # existingPV: mviewer-conf
+      # existingPV: es-data
       size: 50Mi
       ## Persistent Volume Storage Class
       ## If defined, storageClassName: <storageClass>
