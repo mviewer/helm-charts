@@ -14,6 +14,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Push Charts to GHCR
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
       # switch to official https://github.com/helm/chart-releaser-action/issues/107#issuecomment-2133797963
       - name: Run chart-releaser
         uses: acuD1/chart-releaser-action@main
