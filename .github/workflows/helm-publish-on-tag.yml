@@ -1,9 +1,9 @@
 name: Helm publish on new tag
 
-on:  
+on:
   push:
-    tags:
-      - '*'
+    branches:
+      - 'main'
 
 jobs:
   chart-publish-on-tag:
