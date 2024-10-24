@@ -63,7 +63,7 @@ jobs:
           sudo swapon /swapfile
           free -h
           until KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl get --raw='/readyz?verbose'; do echo "wait for k3s to finish"; done
-          kubectl taint nodes -l kubernetes.io/os=linux key1=value1:NoSchedule
+          KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl taint nodes -l kubernetes.io/os=linux key1=value1:NoSchedule
 
       - name: Run chart-testing (install)
         run: |
