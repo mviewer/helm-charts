@@ -21,7 +21,7 @@ jobs:
         with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
-          tool-cache: true
+          tool-cache: false
           # all of these default to true, but feel free to set to
           # "false" if necessary for your workflow
           android: true
@@ -57,7 +57,7 @@ jobs:
       - name: k3s install + add more swap
         run: |
           curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" sh -
-          sudo dd if=/dev/zero of=/swapfile bs=1M count=8k status=progress
+          sudo dd if=/dev/zero of=/swapfile bs=1M count=4k status=progress
           sudo chmod 0600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile

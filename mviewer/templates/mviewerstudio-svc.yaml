@@ -11,4 +11,4 @@ spec:
       targetPort: http
   selector:
     {{- include "mviewer.selectorLabels" . | nindent 4 }}
-    app: mviewerstudio
+    app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewerstudio

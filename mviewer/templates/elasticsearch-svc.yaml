@@ -12,5 +12,5 @@ spec:
       targetPort: elasticsearch
   selector:
     {{- include "mviewer.selectorLabels" . | nindent 4 }}
-    app: mviewer-elasticsearch
+    app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-elasticsearch
 {{- end }}

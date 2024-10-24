@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "mviewer.selectorLabels" . | nindent 6 }}
-      app: mviewer
+      app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewer
   template:
     metadata:
       {{- with $webapp.podAnnotations }}
