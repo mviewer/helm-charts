@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: main Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # switch to official https://github.com/helm/chart-releaser-action/issues/107#issuecomment-2133797963
       - name: Run chart-releaser
