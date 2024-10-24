@@ -2,8 +2,8 @@ name: Helm publish on new tag
 
 on:
   push:
-    branches:
-      - 'main'
+    tags:
+      - '*'
 
 jobs:
   chart-publish-on-tag:
@@ -16,10 +16,11 @@ jobs:
       # switch to official https://github.com/helm/chart-releaser-action/issues/107#issuecomment-2133797963
       - name: Run chart-releaser
         uses: acuD1/login-action@master
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
           skip_upload: true
           charts_dir: .
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Install Helm
         uses: azure/setup-helm@v4
