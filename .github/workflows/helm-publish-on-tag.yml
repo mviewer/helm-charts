@@ -19,6 +19,7 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           skip_upload: true
+          charts_dir: .
 
       - name: Install Helm
         uses: azure/setup-helm@v4
