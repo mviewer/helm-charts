@@ -29,14 +29,14 @@ mviewer:
   podAnnotations:
     myapp: mviewer
   lifecycle:
-    lifecycle:
-      postStart:
-        exec:
-          command: ["/bin/sh", "-c", "echo"]
+    postStart:
+      exec:
+        command: ["/bin/sh", "-c", "echo"]
   extraVolumes: []
   extraVolumeMounts: []
   extraEnv:
-    FOO: "BAR"
+  - name: FOO
+    value: BAR
   persistence:
     mviewer_conf:
       annotations:
@@ -75,12 +75,12 @@ elasticsearch:
   podAnnotations:
     myapp: mviewer
   extraEnv:
-    FOO: "BAR"
+  - name: FOO
+    value: BAR
   lifecycle:
-    lifecycle:
-      postStart:
-        exec:
-          command: ["/bin/sh", "-c", "echo"]
+    postStart:
+      exec:
+        command: ["/bin/sh", "-c", "echo"]
 
 ingress:
   enabled: true
@@ -112,12 +112,13 @@ mviewerstudio:
             - linux
   podAnnotations:
     myapp: mviewer
+  keepConfigFromKubernetes: true
   extraEnv:
-    FOO: "BAR"
+  - name: FOO
+    value: BAR
   lifecycle:
-    lifecycle:
-      postStart:
-        exec:
-          command: ["/bin/sh", "-c", "echo"]
+    postStart:
+      exec:
+        command: ["/bin/sh", "-c", "echo"]
   extraVolumes: []
   extraVolumeMounts: []

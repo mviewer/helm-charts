@@ -46,7 +46,7 @@ spec:
         imagePullPolicy: {{ $webapp.image.imagePullPolicy }}
         {{- with $webapp.extraEnv }}
         env:
-          {{- toYaml . | nindent 10 }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
         resources:
           {{- toYaml $webapp.resources | nindent 10 }}
@@ -73,7 +73,7 @@ spec:
           mountPath: /usr/share/nginx/html/apps
           readOnly: true
         {{- if $webapp.extraVolumeMounts }}
-          {{- $webapp.extraVolumeMounts | toYaml | nindent 10 }}
+          {{- $webapp.extraVolumeMounts | toYaml | nindent 8 }}
         {{- end }}
       volumes:
       - name: mviewer-conf

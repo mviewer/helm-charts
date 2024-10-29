@@ -147,6 +147,8 @@ mviewerstudio:
       # storageClass: "-"
       accessModes:
         - ReadWriteOnce
+  # This will overwrite the config.json from the helm value "configMap" everytime the pod is launched
+  keepConfigFromKubernetes: false
   configMap:
     configJson: |
       {

@@ -43,14 +43,14 @@ spec:
       initContainers:
       - name: copy-starter-configmap
         image: busybox:latest
-        {{- if $webapp.resetConfig }}
-        command: ["sh", "-c", "cp /cm/config.json /mnt/mviewerstudio_conf/;"]
+        {{- if $webapp.keepConfigFromKubernetes }}
+        command: ["sh", "-c", "cp /cm/config.json /mnt/mviewerstudio/static/apps/;"]
         {{- else }}
-        command: ["sh", "-c", "if ! [ -f /mnt/mviewerstudio_conf/config.json ]; then cp /cm/config.json /mnt/mviewerstudio_conf/; fi ;"]
+        command: ["sh", "-c", "if ! [ -f /mnt/mviewerstudio/static/apps/config.json ]; then cp /cm/config.json /mnt/mviewerstudio/static/apps/; fi ;"]
         {{- end }}
         volumeMounts:
-        - name: mviewerstudio-conf
-          mountPath: /mnt/mviewerstudio_conf
+        - name: mviewerstudio-static-apps
+          mountPath: /mnt/mviewerstudio/static/apps
         - name: mviewerstudio-conf-json
           mountPath: /cm
       containers:
@@ -75,7 +75,7 @@ spec:
         - name: DEFAULT_ORG
           value: no_org
         {{- with $webapp.extraEnv }}
-          {{- toYaml . | nindent 10 }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
         resources:
           {{- toYaml $webapp.resources | nindent 10 }}
@@ -91,7 +91,7 @@ spec:
         - name: mviewerstudio-static-apps
           mountPath: /home/apprunner/mviewerstudio_backend/static/apps
         {{- if $webapp.extraVolumeMounts }}
-          {{- $webapp.extraVolumeMounts | toYaml | nindent 10 }}
+          {{- $webapp.extraVolumeMounts | toYaml | nindent 8 }}
         {{- end }}
       volumes:
       - name: mviewer-conf
