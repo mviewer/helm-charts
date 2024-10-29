@@ -8,31 +8,33 @@ on:
 jobs:
   chart-publish-on-tag:
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: write # to push chart release and create a release (helm/chart-releaser-action)
+      packages: write # needed for ghcr access
     steps:
-      - name: main Checkout
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Push Charts to GHCR
+      - name: Configure Git
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      # switch to official https://github.com/helm/chart-releaser-action/issues/107#issuecomment-2133797963
-      - name: Run chart-releaser
-        uses: acuD1/chart-releaser-action@main
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
         with:
-          skip_upload: true
+          version: v3.12.0
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
+        with:
           charts_dir: .
+          config: cr.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Install Helm
-        uses: azure/setup-helm@v4
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_SKIP_EXISTING: "true"
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -41,11 +43,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Charts to GHCR
+      - name: Push charts to GHCR
         run: |
-          for pkg in .cr-release-packages/*; do
+          shopt -s nullglob
+          for pkg in .cr-release-packages/*.tgz; do
             if [ -z "${pkg:-}" ]; then
               break
             fi
-            helm push "${pkg}" oci://ghcr.io/${{ env.REPOSITORY_OWNER }}/${{ env.REPOSITORY }}
+            helm push "${pkg}" "oci://ghcr.io/${GITHUB_REPOSITORY_OWNER}/helm-charts"
           done
