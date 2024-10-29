@@ -42,7 +42,7 @@ spec:
       {{- end }}
       initContainers:
       - name: copy-starter-configmap
-        image: busybox:latest
+        image: busybox:stable
         {{- if $webapp.keepConfigFromKubernetes }}
         command: ["sh", "-c", "cp /cm/config.json /mnt/mviewerstudio/static/apps/;"]
         {{- else }}

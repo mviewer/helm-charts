@@ -22,7 +22,7 @@ WARNING: Change `0.7.0` by the latest version of the helm chart found in https:/
    helm install mviewer oci://ghcr.io/mviewer/helm-charts/mviewer --version 0.7.0
    ```
    
-4. Go to [https://YOURDOMAIN/mviewer](https://YOURDOMAIN/mviewer)
+4. Go to [https://YOURDOMAIN](https://YOURDOMAIN) OR [https://YOURDOMAIN/mviewerstudio](https://YOURDOMAIN/mviewerstudio)
 
 ### Customized installation
 1. Create a new separate 'values' file (or edit the existing one, not recommended).  
@@ -34,7 +34,7 @@ WARNING: Change `0.7.0` by the latest version of the helm chart found in https:/
    helm install -f your-values.yaml mviewer oci://ghcr.io/mviewer/helm-charts/mviewer --version 0.7.0
    ```
 
-4. Go to [https://YOURDOMAIN/mviewer](https://YOURDOMAIN/mviewer)
+4. Go to [https://YOURDOMAIN](https://YOURDOMAIN) OR [https://YOURDOMAIN/mviewerstudio](https://YOURDOMAIN/mviewerstudio)
 
 ## Upgrade
 

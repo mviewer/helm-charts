@@ -40,6 +40,13 @@ spec:
       tolerations:
         {{- toYaml . |nindent 8 }}
       {{- end }}
+      initContainers:
+      - name: copy-default-xml-if-not-found
+        image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"
+        command: ["sh", "-c", "if ! [ -f /mnt/mviewer_apps/default.xml ]; then cp /usr/share/nginx/html/apps/default.xml /mnt/mviewer_apps/default.xml; fi ;"]
+        volumeMounts:
+        - name: mviewer-conf
+          mountPath: /mnt/mviewer_apps
       containers:
       - name: mviewer
         image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"

@@ -94,13 +94,13 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /mviewer/_search
+        - path: /_search
           pathType: Prefix
           svcPort: "9200"
           svcName: mviewer-es-svc
     - host: chart-example.local
       paths:
-        - path: /mviewer
+        - path: /
           pathType: Prefix
           svcPort: "80"
           svcName: mviewer-svc
