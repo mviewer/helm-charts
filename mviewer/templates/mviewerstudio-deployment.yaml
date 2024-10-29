@@ -75,7 +75,6 @@ spec:
         - name: DEFAULT_ORG
           value: no_org
         {{- with $webapp.extraEnv }}
-        env:
           {{- toYaml . | nindent 10 }}
         {{- end }}
         resources:

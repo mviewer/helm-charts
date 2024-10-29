@@ -24,6 +24,7 @@ mviewer:
   lifecycle: {}
   extraVolumes: []
   extraVolumeMounts: []
+  extraEnv: {}
   persistence:
     mviewer_conf:
       annotations:
@@ -66,6 +67,7 @@ elasticsearch:
   tolerations: []
   affinity: {}
   podAnnotations: {}
+  extraEnv: {}
   persistence:
     es_data:
       # existingPV: es-data
@@ -135,6 +137,7 @@ mviewerstudio:
   lifecycle: {}
   extraVolumes: []
   extraVolumeMounts: []
+  extraEnv: {}
   persistence:
     mviewerstudio_conf:
       annotations:

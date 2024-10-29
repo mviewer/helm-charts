@@ -65,6 +65,9 @@ spec:
             value: "-Dlog4j2.formatMsgNoLookups=true -Dlog4j2.disable.jmx=true"
           - name: discovery.type
             value: "single-node"
+          {{- with $webapp.extraEnv }}
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
         volumeMounts:
         - name: elasticsearch-data
           mountPath: /usr/share/elasticsearch/data

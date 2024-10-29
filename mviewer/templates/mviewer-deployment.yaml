@@ -44,6 +44,10 @@ spec:
       - name: mviewer
         image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"
         imagePullPolicy: {{ $webapp.image.imagePullPolicy }}
+        {{- with $webapp.extraEnv }}
+        env:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         resources:
           {{- toYaml $webapp.resources | nindent 10 }}
         securityContext:
