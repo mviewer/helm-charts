@@ -8,6 +8,8 @@ on:
 jobs:
   chart-publish-on-tag:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: main Checkout
         uses: actions/checkout@v3
