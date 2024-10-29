@@ -83,7 +83,6 @@ elasticsearch:
         command: ["/bin/sh", "-c", "echo"]
 
 ingress:
-  enabled: true
   className: "traefik"
 
 mviewerstudio:
