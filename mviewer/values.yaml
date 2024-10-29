@@ -139,7 +139,7 @@ mviewerstudio:
   extraVolumeMounts: []
   extraEnv: {}
   persistence:
-    mviewerstudio_conf:
+    mviewerstudio_static_apps:
       annotations:
         helm.sh/resource-policy: keep
       # existingPV: mviewer-conf

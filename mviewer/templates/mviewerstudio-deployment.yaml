@@ -88,7 +88,7 @@ spec:
         volumeMounts:
         - name: mviewer-conf
           mountPath: /home/apprunner/apps
-        - name: mviewerstudio-conf
+        - name: mviewerstudio-static-apps
           mountPath: /home/apprunner/mviewerstudio_backend/static/apps
         {{- if $webapp.extraVolumeMounts }}
           {{- $webapp.extraVolumeMounts | toYaml | nindent 10 }}
@@ -97,10 +97,10 @@ spec:
       - name: mviewer-conf
         persistentVolumeClaim:
           claimName: {{ include "mviewer.fullname" . }}-mviewer-conf
-      - name: mviewerstudio-conf
-        # Persistent storage for conf
+      - name: mviewerstudio-static-apps
+        # Persistent storage for static/apps folder
         persistentVolumeClaim:
-          claimName: {{ include "mviewer.fullname" . }}-mviewerstudio-conf
+          claimName: {{ include "mviewer.fullname" . }}-studio-static-apps
       - name: mviewerstudio-conf-json
         # initial config file
         configMap:

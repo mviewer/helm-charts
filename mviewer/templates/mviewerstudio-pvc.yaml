@@ -3,8 +3,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "mviewer.fullname" . }}-mviewerstudio-conf
-  {{- with $webapp.persistence.mviewerstudio_conf.annotations }}
+  name: {{ include "mviewer.fullname" . }}-studio-static-apps
+  {{- with $webapp.persistence.mviewerstudio_static_apps.annotations }}
   annotations:
     {{- range $key, $value := . }}
     {{ $key }}: {{ $value }}
@@ -15,20 +15,20 @@ metadata:
     app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewerstudio
 spec:
   accessModes:
-    {{- range $webapp.persistence.mviewerstudio_conf.accessModes }}
+    {{- range $webapp.persistence.mviewerstudio_static_apps.accessModes }}
     - {{ . | quote }}
     {{- end }}
   resources:
     requests:
-      storage: {{ $webapp.persistence.mviewerstudio_conf.size }}
-  {{- if $webapp.persistence.mviewerstudio_conf.storageClass }}
-  {{- if eq "-" $webapp.persistence.mviewerstudio_conf.storageClass }}
+      storage: {{ $webapp.persistence.mviewerstudio_static_apps.size }}
+  {{- if $webapp.persistence.mviewerstudio_static_apps.storageClass }}
+  {{- if eq "-" $webapp.persistence.mviewerstudio_static_apps.storageClass }}
   storageClassName: ""
   {{- else }}
-  storageClassName: {{ $webapp.persistence.mviewerstudio_conf.storageClass }}
+  storageClassName: {{ $webapp.persistence.mviewerstudio_static_apps.storageClass }}
   {{- end }}
   {{- end }}
-  {{- if $webapp.persistence.mviewerstudio_conf.existingPV }}
-  volumeName: {{ $webapp.persistence.mviewerstudio_conf.existingPV }}
+  {{- if $webapp.persistence.mviewerstudio_static_apps.existingPV }}
+  volumeName: {{ $webapp.persistence.mviewerstudio_static_apps.existingPV }}
   {{- end }}
 {{- end }}
