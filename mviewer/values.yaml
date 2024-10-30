@@ -137,7 +137,10 @@ mviewerstudio:
   lifecycle: {}
   extraVolumes: []
   extraVolumeMounts: []
-  extraEnv: {}
+  # see https://github.com/mviewer/mviewerstudio/blob/master/docker/readme.md
+  extraEnv:
+  - name: MVIEWERSTUDIO_URL_PATH_PREFIX
+    value: mviewerstudio
   persistence:
     mviewerstudio_static_apps:
       annotations:
