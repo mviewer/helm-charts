@@ -112,9 +112,6 @@ mviewerstudio:
   podAnnotations:
     myapp: mviewer
   keepConfigFromKubernetes: true
-  extraEnv:
-  - name: FOO
-    value: BAR
   lifecycle:
     postStart:
       exec:

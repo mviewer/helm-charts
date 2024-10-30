@@ -61,20 +61,8 @@ spec:
         - name: http
           containerPort: 8000
           protocol: TCP
-        env:
-        - name: MVIEWERSTUDIO_URL_PATH_PREFIX
-          value: mviewerstudio
-        - name: CONF_PATH_FROM_MVIEWER
-          value: apps/drafts
-        - name: CONF_PUBLISH_PATH_FROM_MVIEWER
-          value: apps/published
-        - name: EXPORT_CONF_FOLDER
-          value: /home/apprunner/apps/drafts
-        - name: MVIEWERSTUDIO_PUBLISH_PATH
-          value: /home/apprunner/apps/published
-        - name: DEFAULT_ORG
-          value: no_org
         {{- with $webapp.extraEnv }}
+        env:
           {{- toYaml . | nindent 8 }}
         {{- end }}
         resources:
