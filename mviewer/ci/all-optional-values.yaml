@@ -37,13 +37,6 @@ mviewer:
   extraEnv:
   - name: FOO
     value: BAR
-  persistence:
-    mviewer_conf:
-      annotations:
-        helm.sh/resource-policy: keep
-      size: 50Mi
-      accessModes:
-        - ReadWriteOnce
 
 elasticsearch:
   enabled: true
