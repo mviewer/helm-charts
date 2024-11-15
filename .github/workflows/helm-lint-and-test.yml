@@ -64,6 +64,8 @@ jobs:
           KUBECONFIG=/etc/rancher/k3s/k3s.yaml kubectl taint nodes -l kubernetes.io/os=linux key1=value1:NoSchedule
 
       - name: Run chart-testing (install)
+        # chart testing do not work on main branch
+        if: github.ref != 'refs/heads/main'
         run: |
           KUBECONFIG=/etc/rancher/k3s/k3s.yaml ct install --chart-dirs . --charts mviewer --skip-clean-up --helm-extra-args '--timeout 1800s' --target-branch ${{ github.event.repository.default_branch }}
           
