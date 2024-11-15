@@ -1,3 +1,7 @@
+# 1.0.1
+
+Bug fix for https://github.com/mviewer/mviewerstudio/issues/327
+
 # 1.0.0
 
 Stable release.
