@@ -17,21 +17,22 @@ WARNING: Change `0.7.0` by the latest version of the helm chart found in https:/
 
 ### Quick start
 
-1. Execute this command for installing the mviewer chart:  
+1. Check the Chart version and use that version in 2nd step: https://github.com/mviewer/helm-charts/blob/main/mviewer/Chart.yaml#L18
+2. Execute this command for installing the mviewer chart:  
    ```
-   helm install mviewer oci://ghcr.io/mviewer/helm-charts/mviewer --version 0.7.0
+   helm install mviewer oci://ghcr.io/mviewer/helm-charts/mviewer --version X.X.X
    ```
    
 4. Go to [https://YOURDOMAIN](https://YOURDOMAIN) OR [https://YOURDOMAIN/mviewerstudio](https://YOURDOMAIN/mviewerstudio)
 
 ### Customized installation
-1. Create a new separate 'values' file (or edit the existing one, not recommended).  
+1. Create a new separate 'values' file (or edit the existing one, not recommended).
+
+2. Check the Chart version and use that version in 3rd step: https://github.com/mviewer/helm-charts/blob/main/mviewer/Chart.yaml#L18
 
 3. Execute this command for installing the mviewer chart:  
    ```
-   helm repo add mviewer https://charts.mviewer.com
-   helm repo update
-   helm install -f your-values.yaml mviewer oci://ghcr.io/mviewer/helm-charts/mviewer --version 0.7.0
+   helm install -f your-values.yaml mviewer oci://ghcr.io/mviewer/helm-charts/mviewer --version X.X.X
    ```
 
 4. Go to [https://YOURDOMAIN](https://YOURDOMAIN) OR [https://YOURDOMAIN/mviewerstudio](https://YOURDOMAIN/mviewerstudio)
