@@ -6,8 +6,10 @@ some of the features and/or implementation choices.
 # Maintainers
 
 ## How to create a new chart release
-1. Change and push the version in the Chart.yaml
+1. Change the version in the Chart.yaml.  
+   Please follow https://semver.org, if you are adding a new feature bump the MINOR version, otherwise if it's a bugfix bump the PATCH version.
 2. Write a changelog in the CHANGELOG.md
+3. Push your changes.
 
 # Usage
 
