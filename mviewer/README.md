@@ -13,7 +13,7 @@ some of the features and/or implementation choices.
 
 ## Install
 
-WARNING: Change `0.7.0` by the latest version of the helm chart found in https://github.com/mviewer/helm-charts/blob/main/mviewer/Chart.yaml#L18
+WARNING: Change `X.X.X` by the latest version of the helm chart found in https://github.com/mviewer/helm-charts/blob/main/mviewer/Chart.yaml#L18
 
 ### Quick start
 
