@@ -55,7 +55,7 @@ elasticsearch:
   image:
     repository: elasticsearch
     pullPolicy: IfNotPresent
-    tag: 7.17.21
+    tag: 8.18.0
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
