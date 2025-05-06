@@ -1,0 +1,18 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+      "config:base"
+    ],
+    "kubernetes": {
+      "fileMatch": ["charts/mviewer/values\\.yaml$"]
+    },
+    "packageRules": [
+      {
+        "matchManagers": ["helm-values"],
+        "matchPackageNames": ["mviewer/mviewer"],
+        "matchDatasources": ["docker"],
+        "allowedVersions": "/^v\\d+\\.\\d+(?:\\.\\d+)?$/",
+        "extractVersion": "^v(?<version>\\d+\\.\\d+(?:\\.\\d+)?)$"
+      }
+    ]
+  }
