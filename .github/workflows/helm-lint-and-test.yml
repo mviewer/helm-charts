@@ -30,7 +30,7 @@ jobs:
           swap-storage: false
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Helm Installation
         uses: azure/setup-helm@v3
