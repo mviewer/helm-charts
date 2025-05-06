@@ -8,11 +8,15 @@ on:
 jobs:
   renovate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to create branches and commit changes
+      pull-requests: write # Needed to create pull requests
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Run Renovate
-        uses: renovatebot/github-action@v42.0.1
+        uses: renovatebot/github-action@v40
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
