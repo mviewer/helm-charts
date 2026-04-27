@@ -3,6 +3,16 @@ entries:
   mviewer:
   - apiVersion: v2
     appVersion: 3.12.0
+    created: "2026-04-27T09:16:50.372496416Z"
+    description: A Helm chart for deploying mviewer and mviewerstudio
+    digest: 2adfd4303a1cb5912b8f1a107650b07c9cc354f4d823011022440432451981b8
+    name: mviewer
+    type: application
+    urls:
+    - https://github.com/mviewer/helm-charts/releases/download/mviewer-1.1.0/mviewer-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: 3.12.0
     created: "2024-11-15T14:19:13.662045064Z"
     description: A Helm chart for deploying mviewer and mviewerstudio
     digest: be007bd2f7e82e0cf6fb1077e46d0a66fbe56c0a174bd8ee8ac4a5c348e8b598
@@ -81,4 +91,4 @@ entries:
     urls:
     - https://github.com/mviewer/helm-charts/releases/download/mviewer-0.4.5/mviewer-0.4.5.tgz
     version: 0.4.5
-generated: "2024-11-15T14:19:13.66208026Z"
+generated: "2026-04-27T09:16:50.372529936Z"
