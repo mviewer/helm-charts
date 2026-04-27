@@ -75,9 +75,9 @@ spec:
         {{- end }}
         volumeMounts:
         - name: mviewer-conf
-          mountPath: /home/apprunner/apps
+          mountPath: /home/mvuser/apps
         - name: mviewerstudio-static-apps
-          mountPath: /home/apprunner/mviewerstudio_backend/static/apps
+          mountPath: /home/mvuser/mviewerstudio_backend/static/apps
         {{- if $webapp.extraVolumeMounts }}
           {{- $webapp.extraVolumeMounts | toYaml | nindent 8 }}
         {{- end }}
