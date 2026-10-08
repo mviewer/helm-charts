@@ -12,11 +12,11 @@ mviewer:
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 1000
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
   securityContext:
-    runAsUser: 1000
+    runAsUser: 999
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -59,9 +59,9 @@ elasticsearch:
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 1000
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
   securityContext: {}
   nodeSelector: {}
   tolerations: []
@@ -125,11 +125,11 @@ mviewerstudio:
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
-    runAsUser: 1000
-    runAsGroup: 1000
-    fsGroup: 1000
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
   securityContext:
-    runAsUser: 1000
+    runAsUser: 999
   nodeSelector: {}
   tolerations: []
   affinity: {}
