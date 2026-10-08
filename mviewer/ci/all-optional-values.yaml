@@ -104,7 +104,6 @@ mviewerstudio:
             - linux
   podAnnotations:
     myapp: mviewer
-  keepConfigFromKubernetes: true
   lifecycle:
     postStart:
       exec:

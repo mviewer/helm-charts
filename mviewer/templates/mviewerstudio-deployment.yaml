@@ -14,10 +14,12 @@ spec:
       app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewerstudio
   template:
     metadata:
-      {{- with $webapp.podAnnotations }}
       annotations:
+        # restart the pod when config.json changes, subPath mounts are not updated live
+        checksum/config: {{ include (print $.Template.BasePath "/mviewerstudio-configmap.yaml") . | sha256sum }}
+        {{- with $webapp.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "mviewer.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: {{ include "mviewer.fullname" . }}-mviewerstudio
@@ -40,19 +42,6 @@ spec:
       tolerations:
         {{- toYaml . |nindent 8 }}
       {{- end }}
-      initContainers:
-      - name: copy-starter-configmap
-        image: busybox:stable
-        {{- if $webapp.keepConfigFromKubernetes }}
-        command: ["sh", "-c", "cp /cm/config.json /mnt/mviewerstudio/static/apps/;"]
-        {{- else }}
-        command: ["sh", "-c", "if ! [ -f /mnt/mviewerstudio/static/apps/config.json ]; then cp /cm/config.json /mnt/mviewerstudio/static/apps/; fi ;"]
-        {{- end }}
-        volumeMounts:
-        - name: mviewerstudio-static-apps
-          mountPath: /mnt/mviewerstudio/static/apps
-        - name: mviewerstudio-conf-json
-          mountPath: /cm
       containers:
       - name: mviewerstudio
         image: "{{ $webapp.image.repository }}:{{ $webapp.image.tag }}"
@@ -78,6 +67,9 @@ spec:
           mountPath: /home/mvuser/apps
         - name: mviewerstudio-static-apps
           mountPath: /home/mvuser/mviewerstudio_backend/static/apps
+        - name: mviewerstudio-conf-json
+          mountPath: /home/mvuser/src/static/config.json
+          subPath: config.json
         {{- if $webapp.extraVolumeMounts }}
           {{- $webapp.extraVolumeMounts | toYaml | nindent 8 }}
         {{- end }}
@@ -86,11 +78,10 @@ spec:
         persistentVolumeClaim:
           claimName: {{ include "mviewer.fullname" . }}-mviewer-conf
       - name: mviewerstudio-static-apps
-        # Persistent storage for static/apps folder
+        # Persistent storage for static/apps folder, unused since mviewerstudio v4.3
         persistentVolumeClaim:
           claimName: {{ include "mviewer.fullname" . }}-studio-static-apps
       - name: mviewerstudio-conf-json
-        # initial config file
         configMap:
           name: {{ include "mviewer.fullname" . }}-mviewerstudio-conf-json
       {{- if $webapp.extraVolumes }}
