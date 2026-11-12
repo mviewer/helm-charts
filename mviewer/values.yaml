@@ -8,7 +8,7 @@ mviewer:
   image:
     repository: mviewer/mviewer
     pullPolicy: IfNotPresent
-    tag: v4.1
+    tag: v4.2
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
@@ -121,7 +121,7 @@ mviewerstudio:
   image:
     repository: mviewer/mviewerstudio
     pullPolicy: IfNotPresent
-    tag: v4.3
+    tag: v4.3.1
   resources: {}
   podSecurityContext:
     runAsNonRoot: true
@@ -156,8 +156,8 @@ mviewerstudio:
       {
         "app_conf": {
             "studio_title": "Mviewer Studio",
-            "mviewer_version":  "3.12",
-            "mviewerstudio_version":  "4.1",
+            "mviewer_version":  "4.2",
+            "mviewerstudio_version":  "4.3.1",
             "api": "api/app",
             "store_style_service": "api/style",
             "mviewer_instance": "/mviewer/",

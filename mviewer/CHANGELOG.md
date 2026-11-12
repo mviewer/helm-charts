@@ -1,3 +1,6 @@
+# 1.4.0
+- Update to mviewer v4.2 & mviewerstudio v4.3.1. Since mviewer v4.2 the official image is again based on nginx-unprivileged (port 8080), see https://github.com/mviewer/mviewer/pull/1290. A custom mviewer image is no longer needed. If you developed custom components, read the migration note: https://mviewerdoc.readthedocs.io/fr/stable/doc_migration/v4.2.html
+
 # 1.3.0
 - Fix mviewerstudio `config.json` being ignored since mviewerstudio v4.3: the ConfigMap is now mounted at `/home/mvuser/src/static/config.json`, the path read by the new image layout. The ConfigMap is now always the source of truth for `config.json`.
 - The pod restarts automatically when `mviewerstudio.configMap.configJson` changes.
